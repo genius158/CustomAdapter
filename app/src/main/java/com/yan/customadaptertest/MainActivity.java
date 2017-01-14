@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         ((HolderTest2) dataError.getHolder()).textView.append("!");
 
                         ((HolderTest2) adapter.getStateFooter().getHolder())
-                                .textView.setText("footer"+times);
+                                .textView.setText("footer" + times);
 
                         StateAdapterItem noWifi = adapter.findStateItem("NO_WIFI");
                         if (noWifi.getHolder() != null)
@@ -94,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
                         StateAdapterItem noData = adapter.findStateItem("NO_DATA");
                         if (noData.getHolder() != null)
                             ((HolderTest2) noData.getHolder()).textView.append("-");
+
+                        if (times % 5 != 0) {
+                            adapter.findStateItem("FIXED").show();
+                        } else {
+                            adapter.findStateItem("FIXED").hide();
+                        }
 
                         if (times % 4 == 0) {
                             adapter.show("DataError")
@@ -270,11 +276,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 //状态类型四
-                .addAdapterItem(new StateAdapterItem<HolderTest2>() {
+                .addAdapterItem(new StateAdapterItem<HolderTest2>("FIXED", true) {
                     @Override
                     public HolderTest2 viewHolder(ViewGroup parent) {
                         HolderTest2 holderTest2 = new HolderTest2(
-                                LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_3, parent, false)
+                                LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_footer, parent, false)
                         );
                         holderTest2.textView.setText("固定的固定的");
                         return holderTest2;
@@ -290,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 //footer
-                .addAdapterItem(new StateAdapterItem<HolderTest2>(FOOTER,getFooter()) {
+                .addAdapterItem(new StateAdapterItem<HolderTest2>(FOOTER, getFooter()) {
                     @Override
                     public HolderTest2 viewHolder(ViewGroup parent) {
                         return null;
@@ -309,9 +315,10 @@ public class MainActivity extends AppCompatActivity {
         holderTest2.textView.setText("获取数据出错");
         return holderTest2;
     }
+
     private HolderTest2 getFooter() {
         RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,100,getResources().getDisplayMetrics()));
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics()));
         View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_footer, null);
         view.setLayoutParams(layoutParams);
         HolderTest2 holderTest2 = new HolderTest2(view);
