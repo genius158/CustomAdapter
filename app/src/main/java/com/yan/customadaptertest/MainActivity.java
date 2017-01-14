@@ -269,6 +269,17 @@ public class MainActivity extends AppCompatActivity {
                         return holderTest2;
                     }
                 })
+                //状态类型四
+                .addAdapterItem(new StateAdapterItem<HolderTest2>() {
+                    @Override
+                    public HolderTest2 viewHolder(ViewGroup parent) {
+                        HolderTest2 holderTest2 = new HolderTest2(
+                                LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_3, parent, false)
+                        );
+                        holderTest2.textView.setText("固定的固定的");
+                        return holderTest2;
+                    }
+                })
                 //header
                 .addAdapterItem(new StateAdapterItem<HolderTest2>(HEADER) {
                     @Override

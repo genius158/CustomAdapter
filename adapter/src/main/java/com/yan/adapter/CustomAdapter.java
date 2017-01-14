@@ -105,7 +105,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (stateAdapterItem.isShow()) {
                 adjustStateSize(1);
             }
-            stateAdapterItems.add(stateAdapterItem);
+            stateAdapterItems.addFirst(stateAdapterItem);
             adjustFooterPosition();
             return this;
         }
