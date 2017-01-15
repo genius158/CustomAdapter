@@ -7,9 +7,9 @@
 ![GIF](GIF.gif)
 
 # include lib
+
     Gradle: compile 'com.yan.adapter:adapter:1.1.2'
-    
-      
+
 # how to use    
 
     //adapter初始化，该怎么用还怎么用
