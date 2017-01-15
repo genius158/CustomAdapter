@@ -73,6 +73,41 @@
              //添加footer
             .addAdapterItem(new StateAdapterItem<HolderTest2>(StateAdapterItem.FOOTER) 
     
+##4.动态更改数据
+
+                 StateAdapterItem dataError = adapter.findStateItem("DataError");
+                 //以参数形式传入的ViewHolder不会出现viewholder为空的情况
+                 ((HolderTest2) dataError.getHolder()).textView.append("!");
+                 ((HolderTest2) adapter.getStateFooter().getHolder())
+                        .textView.setText("footer" + times);
+                 StateAdapterItem noWifi = adapter.findStateItem("NO_WIFI");
+                 if (noWifi.getHolder() != null)
+                      ((HolderTest2) noWifi.getHolder()).textView.append(".");
+                 StateAdapterItem noData = adapter.findStateItem("NO_DATA");
+                 if (noData.getHolder() != null)
+                      ((HolderTest2) noData.getHolder()).textView.append("-");
+                  
+##5.控制显示与隐藏
+
+            adapter.findStateItem("FIXED").hide();
+                //或者
+                adapter.show("DataError")
+                        .hide("NO_WIFI")
+                        .hide("NO_DATA")
+                        .hideHeader(false)//false不立即执行
+                        .hideFooter(false)
+                        .commit();
+##6.点击事件
+
+         adapter.setOnDataItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(RecyclerView.ViewHolder holder, int position) {
+                        ((HolderTest) holder).textView.append(position + "");
+                        toast.setText("onItemClick: position " + position);
+                        toast.show();
+                    }
+                });
+
 ## LICENSE
 
     Copyright 2016 yan
