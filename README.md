@@ -12,11 +12,11 @@
       
 # how to use    
 
-    // adapter初始化
+    //adapter初始化，该怎么用还怎么用
     adapter = new CustomAdapter(dataList);
     recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-    // recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    // recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+    //recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    //recyclerView.setLayoutManager(new GridLayoutManager(this,2));
     recyclerView.setAdapter(adapter);
 
 ##1.添加普通的数据类型    
