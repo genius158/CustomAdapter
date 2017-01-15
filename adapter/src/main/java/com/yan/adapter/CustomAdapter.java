@@ -305,7 +305,6 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return null;
     }
 
-
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         holder.itemView.setTag(R.id.ca_position, position);

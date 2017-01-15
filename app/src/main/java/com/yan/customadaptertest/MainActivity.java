@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.rv);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+//        recyclerView.setLayoutManager(new GridLayoutManager(this,4));
         objects = new ArrayList<>();
         objects.add(new Integer(1));
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
