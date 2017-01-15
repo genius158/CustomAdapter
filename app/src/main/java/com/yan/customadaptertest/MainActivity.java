@@ -165,8 +165,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    ;
-
     class HolderTest1 extends HolderTest {
 
         public HolderTest1(View itemView) {
