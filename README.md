@@ -60,6 +60,7 @@
                     return null;
             }
     })
+    //当然也可以是stateAdapterItem.setHolder(ViewHolder)来设置
     //------------------------------------------------
     private HolderTest2 getHolder() {//这里布局大小需要自己给定
             RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
