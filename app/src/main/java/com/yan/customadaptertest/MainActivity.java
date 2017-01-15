@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private int times;
     List<Object> objects;
     List<Object> dataList;
+    Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         objects = new ArrayList<>();
         objects.add(new Integer(1));
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         objects.add(new CustomAdapter(null));
         objects.add(new Integer(1));
         objects.add(new Float(1.00001));
@@ -68,10 +70,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.setOnDataItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-                ((HolderTest)holder).textView.append(position+"");
-
-                Toast.makeText(MainActivity.this, "onItemClick: position " + position,
-                        Toast.LENGTH_SHORT).show();
+                ((HolderTest) holder).textView.append(position + "");
+                toast.setText("onItemClick: position " + position);
+                toast.show();
             }
         });
 
@@ -154,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     class HolderTest extends RecyclerView.ViewHolder {
         public TextView textView;
 
@@ -161,7 +163,9 @@ public class MainActivity extends AppCompatActivity {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.test1);
         }
-    };
+    }
+
+    ;
 
     class HolderTest1 extends HolderTest {
 
@@ -307,9 +311,17 @@ public class MainActivity extends AppCompatActivity {
                 .addAdapterItem(new StateAdapterItem<HolderTest2>(HEADER) {
                     @Override
                     public HolderTest2 viewHolder(ViewGroup parent) {
-                        return new HolderTest2(
+                        HolderTest2 holderTest2 = new HolderTest2(
                                 LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_header, parent, false)
                         );
+                        holderTest2.textView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                toast.setText("header");
+                                toast.show();
+                            }
+                        });
+                        return holderTest2;
                     }
                 })
                 //footer
