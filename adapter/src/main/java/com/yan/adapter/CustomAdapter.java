@@ -30,7 +30,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private int headerOffset = 0;
 
     private View.OnClickListener onClickListener;
-    private  OnItemClickListener onItemClickListener;
+    private OnItemClickListener onItemClickListener;
     private OnItemClickListener onDataItemClickListener;
 
     private synchronized void putItemToEnd(StateAdapterItem item) {
@@ -307,9 +307,11 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        holder.itemView.setTag(R.id.ca_position, position);
-        holder.itemView.setTag(R.id.ca_holder, holder);
-        holder.itemView.setOnClickListener(onClickListener);
+        if (onClickListener != null) {
+            holder.itemView.setTag(R.id.ca_position, position);
+            holder.itemView.setTag(R.id.ca_holder, holder);
+            holder.itemView.setOnClickListener(onClickListener);
+        }
         if (headerAndFooter[0] && position == 0) {
         } else if (position - headerOffset < dataList.size())
             for (CustomAdapterItem item : customAdapterItems) {

@@ -9,9 +9,7 @@ import android.view.ViewGroup;
 
 public abstract class CustomAdapterItem<T extends RecyclerView.ViewHolder, V> {
     private Integer itemType = -1;
-
     private T holder;
-
 
     public CustomAdapterItem() {
     }
