@@ -53,19 +53,26 @@
                         return null;
                     }
                 })
-             private HolderTest2 getHolder() {//这里布局大小需要自己给定
-                RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                        RecyclerView.LayoutParams.MATCH_PARENT);
-                View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.state_view, null);
-                view.setLayoutParams(layoutParams);
-                HolderTest2 holderTest2 = new HolderTest2(view);
-                holderTest2.textView.setText("获取数据出错");
-                return holderTest2;
-            }
+                //------------------------------------------------
+                 private HolderTest2 getHolder() {//这里布局大小需要自己给定
+                    RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                            RecyclerView.LayoutParams.MATCH_PARENT);
+                    View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.state_view, null);
+                    view.setLayoutParams(layoutParams);
+                    HolderTest2 holderTest2 = new HolderTest2(view);
+                    holderTest2.textView.setText("获取数据出错");
+                    return holderTest2;
+                }
+                //------------------------------------------------
 
 
-##3.添加状态类型
-    
+##3.添加header和footer
+        
+            //添加header
+            .addAdapterItem(new StateAdapterItem<HolderTest2>(StateAdapterItem.HEADER) 
+             //添加footer
+            .addAdapterItem(new StateAdapterItem<HolderTest2>(StateAdapterItem.FOOTER) 
+    
 ## LICENSE
 
     Copyright 2016 yan
