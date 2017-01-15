@@ -6,15 +6,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yan.adapter.CustomAdapter;
 import com.yan.adapter.CustomAdapterItem;
+import com.yan.adapter.OnItemClickListener;
 import com.yan.adapter.StateAdapterItem;
 
 import java.util.ArrayList;
@@ -61,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
         dataList.addAll(objects);
         adapter = initAdapter(dataList);
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnDataItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder holder, int position) {
+                ((HolderTest)holder).textView.append(position+"");
+
+                Toast.makeText(MainActivity.this, "onItemClick: position " + position,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -141,22 +154,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    class HolderTest1 extends RecyclerView.ViewHolder {
+    class HolderTest extends RecyclerView.ViewHolder {
         public TextView textView;
 
-        public HolderTest1(View itemView) {
+        public HolderTest(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.test1);
         }
+    };
+
+    class HolderTest1 extends HolderTest {
+
+        public HolderTest1(View itemView) {
+            super(itemView);
+        }
     }
 
-    class HolderTest2 extends RecyclerView.ViewHolder {
-        public TextView textView;
+    class HolderTest2 extends HolderTest {
 
         public HolderTest2(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.test1);
         }
     }
 

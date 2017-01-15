@@ -1,9 +1,12 @@
 package com.yan.adapter;
 
+import android.support.annotation.IdRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -27,8 +30,11 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List dataList;
     private Integer itemType = 0x101;
     private boolean[] headerAndFooter = new boolean[2];
-
     private int headerOffset = 0;
+
+    private View.OnClickListener onClickListener;
+    private  OnItemClickListener onItemClickListener;
+    private OnItemClickListener onDataItemClickListener;
 
     private synchronized void putItemToEnd(StateAdapterItem item) {
         if (stateAdapterItems.size() > 1 &&
@@ -302,8 +308,12 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return null;
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        holder.itemView.setTag(R.id.ca_position, position);
+        holder.itemView.setTag(R.id.ca_holder, holder);
+        holder.itemView.setOnClickListener(onClickListener);
         if (headerAndFooter[0] && position == 0) {
         } else if (position - headerOffset < dataList.size())
             for (CustomAdapterItem item : customAdapterItems) {
@@ -324,4 +334,38 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return dataList.size() + stateCurrentSize +
                 ((headerAndFooter[0]) ? 1 : 0);
     }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        initOnClickListener();
+        this.onItemClickListener = onItemClickListener;
+    }
+
+
+    public void setOnDataItemClickListener(OnItemClickListener onDataItemClickListener) {
+        initOnClickListener();
+        this.onDataItemClickListener = onDataItemClickListener;
+    }
+
+    private void initOnClickListener() {
+        if (onClickListener == null) {
+            onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = (int) v.getTag(R.id.ca_position);
+                    RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) v.getTag(R.id.ca_holder);
+
+                    if (onDataItemClickListener != null) {
+                        if (position - headerOffset < dataList.size() &&
+                                position - headerOffset >= 0)
+                            onDataItemClickListener.onItemClick(viewHolder, position - headerOffset);
+                    }
+
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemClick(viewHolder, position);
+                    }
+                }
+            };
+        }
+    }
+
 }
