@@ -7,7 +7,7 @@
 ![GIF](GIF.gif)
 
 # include lib
-    Gradle:
+    Gradle: compile 'com.yan.adapter:adapter:1.1.2'
     
       
 # how to use    

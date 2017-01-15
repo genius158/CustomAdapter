@@ -336,7 +336,6 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.onItemClickListener = onItemClickListener;
     }
 
-
     public void setOnDataItemClickListener(OnItemClickListener onDataItemClickListener) {
         initOnClickListener();
         this.onDataItemClickListener = onDataItemClickListener;

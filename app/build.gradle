@@ -28,4 +28,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.0'
     testCompile 'junit:junit:4.12'
     compile project(':adapter')
+//    compile 'com.yan.adapter:adapter:1.1.2'
 }
