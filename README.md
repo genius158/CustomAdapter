@@ -106,6 +106,8 @@
 
 ##6.点击事件
 
+     adapter.setOnItemClickListener(...//设置所有位置的点击事件
+     //设置数据所在位置的点击事件
     adapter.setOnDataItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
