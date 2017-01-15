@@ -1,7 +1,6 @@
 package com.yan.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
 
 /**
  * Created by yan on 2017/1/13.

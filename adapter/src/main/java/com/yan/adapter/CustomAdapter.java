@@ -1,12 +1,10 @@
 package com.yan.adapter;
 
-import android.support.annotation.IdRes;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
