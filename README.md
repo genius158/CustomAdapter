@@ -94,9 +94,9 @@
                 adapter.show("DataError")
                         .hide("NO_WIFI")
                         .hide("NO_DATA")
-                        .hideHeader(false)//false不立即执行
-                        .hideFooter(false)
-                        .commit();
+                            .hideHeader(false)//false不立即执行
+                            .hideFooter(false)
+                            .commit();
 ##6.点击事件
 
          adapter.setOnDataItemClickListener(new OnItemClickListener() {
