@@ -8,7 +8,7 @@
 
 # include lib
 
-    Gradle: compile 'com.yan.adapter:adapter:1.1.2'
+    Gradle: compile 'com.yan.adapter:adapter:1.1.4'
 
 # how to use    
 
