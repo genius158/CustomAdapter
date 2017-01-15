@@ -17,7 +17,6 @@ import static com.yan.adapter.StateAdapterItem.NORMAL;
 /**
  * Created by yan on 2017/1/13.
  */
-@SuppressWarnings("unchecked")
 public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<CustomAdapterItem> customAdapterItems;
     private LinkedList<StateAdapterItem> stateAdapterItems;
