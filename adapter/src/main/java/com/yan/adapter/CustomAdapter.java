@@ -296,7 +296,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         }
         try {
-            throw new Error("require customAdapterItem for " + dataList.get(position).getClass() +
+            throw new Error("require customAdapterItem for " + dataList.get(position - headerOffset).getClass() +
                     " please check the customAdapterItem that you had add");
         } catch (Exception e) {
             e.printStackTrace();

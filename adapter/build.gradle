@@ -131,7 +131,7 @@ android {
         minSdkVersion 11
         targetSdkVersion 24
         versionCode 3
-        versionName "1.1.6"
+        versionName "1.1.7"
     }
     buildTypes {
         release {
@@ -142,7 +142,7 @@ android {
 }
 
 group = 'com.yan.adapter'
-version = '1.1.6'
+version = '1.1.7'
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
@@ -187,9 +187,9 @@ bintray {
         name = 'com.yan.adapter'
 
         version {
-            name = '1.1.6'
+            name = '1.1.7'
             desc = "a adapter for recyclerView"
-            vcsTag = '1.1.6'
+            vcsTag = '1.1.7'
         }
 
         licenses = ['Apache-2.0']
