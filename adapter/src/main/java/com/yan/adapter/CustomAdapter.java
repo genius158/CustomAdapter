@@ -33,10 +33,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private OnItemClickListener onDataItemClickListener;
 
     private synchronized void putItemToEnd(StateAdapterItem item) {
-        if (
-                stateAdapterItems != null &&
-                        stateAdapterItems.size() > 1 &&
-                        stateAdapterItems.getLast() != item) {
+        if (stateAdapterItems != null &&
+                stateAdapterItems.size() > 1 &&
+                stateAdapterItems.getLast() != item) {
             stateAdapterItems.remove(item);
             stateAdapterItems.addLast(item);
         }
@@ -53,10 +52,8 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public synchronized CustomAdapter addAdapterItem(CustomAdapterItem item) {
         if (item instanceof StateAdapterItem) {
-            StateAdapterItem stateAdapterItem =
-                    (StateAdapterItem) item;
+            StateAdapterItem stateAdapterItem = (StateAdapterItem) item;
             stateAdapterItem.attach(this);
-
             if (stateAdapterItems == null) {
                 stateAdapterItems = new LinkedList<>();
             }
@@ -102,7 +99,6 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             customAdapterItems = new ArrayList<>();
         }
         customAdapterItems.add(item);
-
         return this;
     }
 
@@ -217,9 +213,8 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return (
-                            stateItemTypes != null &&
-                                    stateItemTypes.contains(getItemViewType(position)))
+                    return (stateItemTypes != null &&
+                            stateItemTypes.contains(getItemViewType(position)))
                             ? gridManager.getSpanCount() : 1;
                 }
             });
@@ -230,8 +225,8 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-        if (lp != null
-                && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+        if (lp != null &&
+                lp instanceof StaggeredGridLayoutManager.LayoutParams) {
             StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
             if (holder.getLayoutPosition() == 0 &&
                     (stateHeader != null) &&
