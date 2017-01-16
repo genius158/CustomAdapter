@@ -3,6 +3,7 @@ package com.yan.adapter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -241,13 +242,21 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         }
 
-        if (headerFooterMore[1] && position == getItemCount() - 1 ) {
+        if (headerFooterMore[1] && position == getItemCount() - 1) {
             if (stateFooter.getItemType() == -1) {
                 ++itemType;
                 stateItemTypes.add(itemType);
                 return stateFooter.setItemType(itemType);
             } else {
                 return stateFooter.getItemType();
+            }
+        }
+
+        if (customAdapterItems == null || customAdapterItems.isEmpty()) {
+            try {
+                throw new Error("must call addAdapterItem to add item type");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

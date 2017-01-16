@@ -16,21 +16,21 @@ import android.widget.Toast;
 import com.yan.adapter.CustomAdapter;
 import com.yan.adapter.CustomAdapterItem;
 import com.yan.adapter.OnItemClickListener;
-import com.yan.adapter.OnLoadMoreListener;
 import com.yan.adapter.StateAdapterItem;
+import com.yan.customadaptertest.LoadMore.LoadMoreWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.yan.adapter.StateAdapterItem.FOOTER;
 import static com.yan.adapter.StateAdapterItem.HEADER;
-import static com.yan.adapter.StateAdapterItem.LOAD_MORE;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private CustomAdapter adapter;
+    private LoadMoreWrapper moreWrapper;
     private int times;
     List<Object> objects;
     List<Object> dataList;
@@ -64,9 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
         dataList = new ArrayList<>();
         dataList.addAll(objects);
-        adapter = initAdapter(dataList);
-        recyclerView.setAdapter(adapter);
 
+        adapter = initAdapter(dataList);
         adapter.setOnDataItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
@@ -76,6 +75,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        moreWrapper = new LoadMoreWrapper(adapter);
+        moreWrapper.setLoadMoreView(
+                getLoadMoreView()
+        );
+        moreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        try {
+                            Thread.sleep(30);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+                        dataList.add("dsfasdff");
+                        dataList.add(new Integer(2322323));
+                        dataList.add(new Float(0009f));
+                        moreWrapper.notifyDataSetChanged();
+                    }
+                }.execute();
+
+            }
+        });
+
+        recyclerView.setAdapter(moreWrapper);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -109,11 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         if (noData.getHolder() != null)
                             ((HolderTest2) noData.getHolder()).textView.append("-");
 
-//                        if (times % 5 != 0) {
-//                            adapter.findStateItem("FIXED").show();
-//                        } else {
-//                            adapter.findStateItem("FIXED").hide();
-//                        }
+                        moreWrapper.clearLoadMore(true);
 
                         if (times % 4 == 0) {
                             adapter.show("DataError")
@@ -121,39 +148,53 @@ public class MainActivity extends AppCompatActivity {
                                     .hide("NO_DATA")
                                     .hideHeader(false)
                                     .hideFooter(false)
-                                    .commit();
+//                            .commit();
+                            ;
+                            moreWrapper.notifyDataSetChanged();
                         } else if (times % 4 == 1) {
                             adapter.show("NO_WIFI")
                                     .hide("DataError")
                                     .hide("NO_DATA")
                                     .hideHeader(false)
                                     .hideFooter(false)
-                                    .commit();
+//                            .commit();
+                            ;
+                            moreWrapper.notifyDataSetChanged();
                         } else if (times % 4 == 2) {
                             adapter.show("NO_DATA")
                                     .hide("DataError")
                                     .hide("NO_WIFI")
                                     .showHeader(false)
                                     .showFooter(false)
-                                    .commit();
+//                            .commit();
+                            ;
+                            moreWrapper.notifyDataSetChanged();
                         } else if (times % 4 == 3) {
                             dataList.addAll(objects);
-                            // adapter.findStateItem("DataError").hide();
-                            // adapter.findStateItem("NO_WIFI").hide();
-                            // adapter.findStateItem("NO_DATA").hide();
-                            // adapter.showHeader(true);
                             adapter.hide("NO_DATA")
                                     .hide("DataError")
                                     .hide("NO_WIFI")
                                     .showHeader(false)
-                                    .showFooter(false)
-                                    .commit();
+                                    .hideFooter(false)
+//                            .commit();
+                            ;
+                            moreWrapper.clearLoadMore(false);
+                            moreWrapper.notifyDataSetChanged();
                         }
                         times++;
                     }
                 }.execute();
             }
         });
+    }
+
+    private View getLoadMoreView() {
+        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics()));
+        View loadMore = getLayoutInflater().inflate(R.layout.item_type_loadmore, null);
+        loadMore.setLayoutParams(layoutParams);
+        return loadMore;
     }
 
     class HolderTest extends RecyclerView.ViewHolder {
@@ -294,17 +335,7 @@ public class MainActivity extends AppCompatActivity {
                         return holderTest2;
                     }
                 })
-                //状态类型四
-                .addAdapterItem(new StateAdapterItem<HolderTest2>("FIXED", true) {
-                    @Override
-                    public HolderTest2 viewHolder(ViewGroup parent) {
-                        HolderTest2 holderTest2 = new HolderTest2(
-                                LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_footer, parent, false)
-                        );
-                        holderTest2.textView.setText("固定的固定的");
-                        return holderTest2;
-                    }
-                })
+
                 //header
                 .addAdapterItem(new StateAdapterItem<HolderTest2>(HEADER) {
                     @Override
@@ -322,15 +353,7 @@ public class MainActivity extends AppCompatActivity {
                         return holderTest2;
                     }
                 })
-                //loadMore
-                .addAdapterItem(new StateAdapterItem<HolderTest2>(LOAD_MORE) {
-                    @Override
-                    public HolderTest2 viewHolder(ViewGroup parent) {
-                        return new HolderTest2(
-                                LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_loadmore, parent, false)
-                        );
-                    }
-                })
+
                 //footer
                 .addAdapterItem(new StateAdapterItem<HolderTest2>(FOOTER, getFooter()) {
                     @Override
