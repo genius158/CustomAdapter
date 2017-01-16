@@ -288,13 +288,18 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     if (stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType() == -1) {
                         ++itemType;
                         stateItemTypes.add(itemType);
-                        return stateAdapterItems.get(position - headerOffset - dataList.size())
-                                .setItemType(itemType);
+                        return stateAdapterItems.get(position - headerOffset - dataList.size()).setItemType(itemType);
                     } else {
                         return stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType();
                     }
                 }
             }
+        }
+        try {
+            throw new Error("require customAdapterItem for " + dataList.get(position).getClass() +
+                    " please check the customAdapterItem that you had add");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return 0;
     }
