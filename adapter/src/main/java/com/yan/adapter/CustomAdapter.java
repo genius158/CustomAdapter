@@ -33,15 +33,18 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private OnItemClickListener onDataItemClickListener;
 
     private synchronized void putItemToEnd(StateAdapterItem item) {
-        if (stateAdapterItems.size() > 1 &&
-                stateAdapterItems.getLast() != item) {
+        if (
+                stateAdapterItems != null &&
+                        stateAdapterItems.size() > 1 &&
+                        stateAdapterItems.getLast() != item) {
             stateAdapterItems.remove(item);
             stateAdapterItems.addLast(item);
         }
     }
 
     private synchronized void putItemToTop(StateAdapterItem item) {
-        if (stateAdapterItems.size() > 1 &&
+        if (stateAdapterItems != null &&
+                stateAdapterItems.size() > 1 &&
                 stateAdapterItems.getFirst() != item) {
             stateAdapterItems.remove(item);
             stateAdapterItems.addFirst(item);
@@ -104,9 +107,11 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public StateAdapterItem findStateItem(String tag) {
-        for (StateAdapterItem item : stateAdapterItems) {
-            if (tag.equals(item.getTag())) {
-                return item;
+        if (stateAdapterItems != null) {
+            for (StateAdapterItem item : stateAdapterItems) {
+                if (tag.equals(item.getTag())) {
+                    return item;
+                }
             }
         }
         try {
@@ -212,7 +217,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    return stateItemTypes.contains(getItemViewType(position))
+                    return (
+                            stateItemTypes != null &&
+                                    stateItemTypes.contains(getItemViewType(position)))
                             ? gridManager.getSpanCount() : 1;
                 }
             });
@@ -282,13 +289,15 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     }
                 }
             } else {
-                if (stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType() == -1) {
-                    ++itemType;
-                    stateItemTypes.add(itemType);
-                    return stateAdapterItems.get(position - headerOffset - dataList.size())
-                            .setItemType(itemType);
-                } else {
-                    return stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType();
+                if (stateAdapterItems != null) {
+                    if (stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType() == -1) {
+                        ++itemType;
+                        stateItemTypes.add(itemType);
+                        return stateAdapterItems.get(position - headerOffset - dataList.size())
+                                .setItemType(itemType);
+                    } else {
+                        return stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType();
+                    }
                 }
             }
         }
@@ -313,16 +322,19 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             return (stateFooter.getHolder() != null) ? stateFooter.getHolder() :
                     stateFooter.setHolder(stateFooter.viewHolder(parent));
         }
-
-        for (CustomAdapterItem item : customAdapterItems) {
-            if (item.getItemType() == viewType) {
-                return item.setHolder(item.viewHolder(parent));
+        if (customAdapterItems != null) {
+            for (CustomAdapterItem item : customAdapterItems) {
+                if (item.getItemType() == viewType) {
+                    return item.setHolder(item.viewHolder(parent));
+                }
             }
         }
-        for (StateAdapterItem item : stateAdapterItems) {
-            if (item.getItemType() == viewType) {
-                return (item.getHolder() != null) ? item.getHolder() :
-                        item.setHolder(item.viewHolder(parent));
+        if (stateAdapterItems != null) {
+            for (StateAdapterItem item : stateAdapterItems) {
+                if (item.getItemType() == viewType) {
+                    return (item.getHolder() != null) ? item.getHolder() :
+                            item.setHolder(item.viewHolder(parent));
+                }
             }
         }
         return null;
@@ -343,7 +355,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         stateFooter.isShow() &&
                         position == getItemCount() - 1)
                 ) {
-        } else if (position - headerOffset < dataList.size())
+        } else if (
+                stateAdapterItems != null &&
+                        position - headerOffset < dataList.size()) {
             for (CustomAdapterItem item : customAdapterItems) {
                 if (dataList.get(position - headerOffset) != null &&
                         item.dataType() == dataList.get(position - headerOffset).getClass()) {
@@ -351,6 +365,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     break;
                 }
             }
+        }
     }
 
     private synchronized void adjustStateSize(int stateCurrentSize) {

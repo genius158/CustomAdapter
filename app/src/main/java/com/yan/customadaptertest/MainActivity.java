@@ -302,64 +302,64 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
 
-                //状态类型一
-                .addAdapterItem(new StateAdapterItem<HolderTest2>("DataError", false,
-                        getHolder()) {
-                    @Override
-                    public HolderTest2 viewHolder(ViewGroup parent) {
-                        return null;
-                    }
-                })
-
-                //状态类型二
-                .addAdapterItem(new StateAdapterItem<HolderTest2>("NO_WIFI", false) {
-                    @Override
-                    public HolderTest2 viewHolder(ViewGroup parent) {
-                        HolderTest2 holderTest2 = new HolderTest2(
-                                LayoutInflater.from(MainActivity.this).inflate(R.layout.state_view, parent, false)
-                        );
-                        holderTest2.textView.setText("确保网络连接正常");
-                        return holderTest2;
-                    }
-                })
-
-                //状态类型三
-                .addAdapterItem(new StateAdapterItem<HolderTest2>("NO_DATA", false) {
-                    @Override
-                    public HolderTest2 viewHolder(ViewGroup parent) {
-                        HolderTest2 holderTest2 = new HolderTest2(
-                                LayoutInflater.from(MainActivity.this).inflate(R.layout.state_view, parent, false)
-                        );
-                        holderTest2.textView.setText("没有加载到数据");
-                        return holderTest2;
-                    }
-                })
-
-                //header
-                .addAdapterItem(new StateAdapterItem<HolderTest2>(HEADER, true) {
-                    @Override
-                    public HolderTest2 viewHolder(ViewGroup parent) {
-                        HolderTest2 holderTest2 = new HolderTest2(
-                                LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_header, parent, false)
-                        );
-                        holderTest2.textView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                toast.setText("header");
-                                toast.show();
-                            }
-                        });
-                        return holderTest2;
-                    }
-                })
-
-                //footer
-                .addAdapterItem(new StateAdapterItem<HolderTest2>(FOOTER, getFooter(), false) {
-                    @Override
-                    public HolderTest2 viewHolder(ViewGroup parent) {
-                        return null;
-                    }
-                })
+//                //状态类型一
+//                .addAdapterItem(new StateAdapterItem<HolderTest2>("DataError", false,
+//                        getHolder()) {
+//                    @Override
+//                    public HolderTest2 viewHolder(ViewGroup parent) {
+//                        return null;
+//                    }
+//                })
+//
+//                //状态类型二
+//                .addAdapterItem(new StateAdapterItem<HolderTest2>("NO_WIFI", false) {
+//                    @Override
+//                    public HolderTest2 viewHolder(ViewGroup parent) {
+//                        HolderTest2 holderTest2 = new HolderTest2(
+//                                LayoutInflater.from(MainActivity.this).inflate(R.layout.state_view, parent, false)
+//                        );
+//                        holderTest2.textView.setText("确保网络连接正常");
+//                        return holderTest2;
+//                    }
+//                })
+//
+//                //状态类型三
+//                .addAdapterItem(new StateAdapterItem<HolderTest2>("NO_DATA", false) {
+//                    @Override
+//                    public HolderTest2 viewHolder(ViewGroup parent) {
+//                        HolderTest2 holderTest2 = new HolderTest2(
+//                                LayoutInflater.from(MainActivity.this).inflate(R.layout.state_view, parent, false)
+//                        );
+//                        holderTest2.textView.setText("没有加载到数据");
+//                        return holderTest2;
+//                    }
+//                })
+//
+//                //header
+//                .addAdapterItem(new StateAdapterItem<HolderTest2>(HEADER, true) {
+//                    @Override
+//                    public HolderTest2 viewHolder(ViewGroup parent) {
+//                        HolderTest2 holderTest2 = new HolderTest2(
+//                                LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_header, parent, false)
+//                        );
+//                        holderTest2.textView.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                toast.setText("header");
+//                                toast.show();
+//                            }
+//                        });
+//                        return holderTest2;
+//                    }
+//                })
+//
+//                //footer
+//                .addAdapterItem(new StateAdapterItem<HolderTest2>(FOOTER, getFooter(), false) {
+//                    @Override
+//                    public HolderTest2 viewHolder(ViewGroup parent) {
+//                        return null;
+//                    }
+//                })
 
                 ;
     }
