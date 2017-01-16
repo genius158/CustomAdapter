@@ -34,7 +34,7 @@ public abstract class StateAdapterItem<T extends RecyclerView.ViewHolder>
     }
 
     public StateAdapterItem(boolean isShow) {
-        this(null, isShow);
+        this(null, isShow, null);
     }
 
     public StateAdapterItem(boolean isShow, T t) {
@@ -49,8 +49,16 @@ public abstract class StateAdapterItem<T extends RecyclerView.ViewHolder>
         this(null, true, stateItemType, null);
     }
 
+    public StateAdapterItem(Integer stateItemType, boolean isShow) {
+        this(null, isShow, stateItemType, null);
+    }
+
     public StateAdapterItem(Integer stateItemType, T holder) {
         this(null, true, stateItemType, holder);
+    }
+
+    public StateAdapterItem(Integer stateItemType, T holder, boolean isShow) {
+        this(null, isShow, stateItemType, holder);
     }
 
     public StateAdapterItem(String tag) {

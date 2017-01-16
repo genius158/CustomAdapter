@@ -3,7 +3,6 @@ package com.yan.adapter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,7 +26,6 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private volatile int stateCurrentSize = 0;
     private List dataList;
     private Integer itemType = 0x101;
-    private boolean[] headerFooterMore = new boolean[2];
     private int headerOffset = 0;
 
     private View.OnClickListener onClickListener;
@@ -64,27 +62,27 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
             if (stateAdapterItem.getStateItemType() != NORMAL) {
                 if (stateAdapterItem.getStateItemType() == HEADER) {
-                    if (headerFooterMore[0]) {
+                    if (stateHeader != null) {
                         try {
                             throw new Error("can only hold one header");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    headerOffset = 1;
-                    headerFooterMore[0] = true;
+                    if (stateAdapterItem.isShow())
+                        headerOffset = 1;
+
                     stateHeader = stateAdapterItem;
                     return this;
 
                 } else if (stateAdapterItem.getStateItemType() == FOOTER) {
-                    if (headerFooterMore[1]) {
+                    if (stateFooter != null) {
                         try {
                             throw new Error("can only hold one footer");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    headerFooterMore[1] = true;
                     stateFooter = stateAdapterItem;
                 }
                 return this;
@@ -120,7 +118,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public CustomAdapter hideHeader(boolean withCommit) {
-        headerFooterMore[0] = false;
+        if (stateHeader == null)
+            return this;
+        stateHeader.setShow(false);
         headerOffset = 0;
         if (withCommit)
             notifyDataSetChanged();
@@ -128,7 +128,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public CustomAdapter showHeader(boolean withCommit) {
-        headerFooterMore[0] = true;
+        if (stateHeader == null)
+            return this;
+        stateHeader.setShow(true);
         headerOffset = 1;
         if (withCommit)
             notifyDataSetChanged();
@@ -136,14 +138,18 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public CustomAdapter hideFooter(boolean withCommit) {
-        headerFooterMore[1] = false;
+        if (stateFooter == null)
+            return this;
+        stateFooter.setShow(false);
         if (withCommit)
             notifyDataSetChanged();
         return this;
     }
 
     public CustomAdapter showFooter(boolean withCommit) {
-        headerFooterMore[1] = true;
+        if (stateFooter == null)
+            return this;
+        stateFooter.setShow(true);
         if (withCommit)
             notifyDataSetChanged();
         return this;
@@ -221,7 +227,8 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
             StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
             if (holder.getLayoutPosition() == 0 &&
-                    headerFooterMore[0]) {
+                    (stateHeader != null) &&
+                    stateHeader.isShow()) {
                 p.setFullSpan(true);
             } else if ((holder.getLayoutPosition() >= dataList.size() + headerOffset)) {
                 p.setFullSpan(true);
@@ -232,7 +239,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        if (headerFooterMore[0] && position == 0) {
+        if ((stateHeader != null) &&
+                stateHeader.isShow() &&
+                position == 0) {
             if (stateHeader.getItemType() == -1) {
                 ++itemType;
                 stateItemTypes.add(itemType);
@@ -242,7 +251,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         }
 
-        if (headerFooterMore[1] && position == getItemCount() - 1) {
+        if ((stateFooter != null) &&
+                stateFooter.isShow() &&
+                position == getItemCount() - 1) {
             if (stateFooter.getItemType() == -1) {
                 ++itemType;
                 stateItemTypes.add(itemType);
@@ -324,8 +335,13 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.itemView.setTag(R.id.ca_holder, holder);
             holder.itemView.setOnClickListener(onClickListener);
         }
-        if ((headerFooterMore[0] && position == 0) ||
-                (headerFooterMore[1] && position == getItemCount() - 1)
+        if (((stateHeader != null) &&
+                stateHeader.isShow() &&
+                position == 0)
+                ||
+                ((stateFooter != null) &&
+                        stateFooter.isShow() &&
+                        position == getItemCount() - 1)
                 ) {
         } else if (position - headerOffset < dataList.size())
             for (CustomAdapterItem item : customAdapterItems) {
@@ -344,8 +360,8 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
         return dataList.size() + stateCurrentSize +
-                ((headerFooterMore[0]) ? 1 : 0) +
-                ((headerFooterMore[1]) ? 1 : 0)
+                (((stateHeader != null) && stateHeader.isShow()) ? 1 : 0) +
+                (((stateFooter != null) && stateFooter.isShow()) ? 1 : 0)
                 ;
     }
 

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.TypedValue;
@@ -42,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.rv);
         toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-//        recyclerView.setLayoutManager(new GridLayoutManager(this,4));
+//        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new GridLayoutManager(this,4));
         objects = new ArrayList<>();
         objects.add(new Integer(1));
         objects.add(new CustomAdapter(null));
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
                         moreWrapper.notifyDataSetChanged();
                     }
                 }.execute();
-
             }
         });
 
@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-
                         return null;
                     }
 
@@ -337,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                 })
 
                 //header
-                .addAdapterItem(new StateAdapterItem<HolderTest2>(HEADER) {
+                .addAdapterItem(new StateAdapterItem<HolderTest2>(HEADER, true) {
                     @Override
                     public HolderTest2 viewHolder(ViewGroup parent) {
                         HolderTest2 holderTest2 = new HolderTest2(
@@ -355,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
                 })
 
                 //footer
-                .addAdapterItem(new StateAdapterItem<HolderTest2>(FOOTER, getFooter()) {
+                .addAdapterItem(new StateAdapterItem<HolderTest2>(FOOTER, getFooter(), false) {
                     @Override
                     public HolderTest2 viewHolder(ViewGroup parent) {
                         return null;
