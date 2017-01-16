@@ -26,7 +26,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private volatile int stateCurrentSize = 0;
     private List dataList;
     private Integer itemType = 0x101;
-    private boolean[] headerAndFooter = new boolean[2];
+    private boolean[] headerFooterMore = new boolean[2];
     private int headerOffset = 0;
 
     private View.OnClickListener onClickListener;
@@ -38,17 +38,6 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 stateAdapterItems.getLast() != item) {
             stateAdapterItems.remove(item);
             stateAdapterItems.addLast(item);
-
-            adjustFooterPosition();
-        }
-    }
-
-    private void adjustFooterPosition() {
-        if (stateFooter != null &&
-                stateFooter.isShow() &&
-                stateAdapterItems.get(stateCurrentSize - 1) != stateFooter) {
-            stateAdapterItems.remove(stateFooter);
-            stateAdapterItems.add(stateCurrentSize - 1, stateFooter);
         }
     }
 
@@ -57,8 +46,6 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 stateAdapterItems.getFirst() != item) {
             stateAdapterItems.remove(item);
             stateAdapterItems.addFirst(item);
-
-            adjustFooterPosition();
         }
     }
 
@@ -76,32 +63,29 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
             if (stateAdapterItem.getStateItemType() != NORMAL) {
                 if (stateAdapterItem.getStateItemType() == HEADER) {
-                    headerOffset = 1;
-                    if (headerAndFooter[0]) {
+                    if (headerFooterMore[0]) {
                         try {
                             throw new Error("can only hold one header");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
-                    headerAndFooter[0] = true;
+                    headerOffset = 1;
+                    headerFooterMore[0] = true;
                     stateHeader = stateAdapterItem;
                     return this;
-                }
-                if (headerAndFooter[1]) {
-                    try {
-                        throw new Error("can only hold one footer");
-                    } catch (Exception e) {
-                        e.printStackTrace();
+
+                } else if (stateAdapterItem.getStateItemType() == FOOTER) {
+                    if (headerFooterMore[1]) {
+                        try {
+                            throw new Error("can only hold one footer");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
+                    headerFooterMore[1] = true;
+                    stateFooter = stateAdapterItem;
                 }
-                headerAndFooter[1] = (stateAdapterItem.getStateItemType() == FOOTER);
-                stateFooter = stateAdapterItem;
-                stateAdapterItems.add(stateFooter);
-                if (stateAdapterItem.isShow()) {
-                    adjustStateSize(1);
-                }
-                adjustFooterPosition();
                 return this;
             }
 
@@ -110,8 +94,6 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 stateAdapterItems.addFirst(stateAdapterItem);
             } else
                 stateAdapterItems.add(stateAdapterItem);
-
-            adjustFooterPosition();
             return this;
         }
         if (customAdapterItems == null) {
@@ -137,7 +119,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public CustomAdapter hideHeader(boolean withCommit) {
-        headerAndFooter[0] = false;
+        headerFooterMore[0] = false;
         headerOffset = 0;
         if (withCommit)
             notifyDataSetChanged();
@@ -145,7 +127,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public CustomAdapter showHeader(boolean withCommit) {
-        headerAndFooter[0] = true;
+        headerFooterMore[0] = true;
         headerOffset = 1;
         if (withCommit)
             notifyDataSetChanged();
@@ -153,11 +135,17 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public CustomAdapter hideFooter(boolean withCommit) {
-        return hide(stateFooter, withCommit);
+        headerFooterMore[1] = false;
+        if (withCommit)
+            notifyDataSetChanged();
+        return this;
     }
 
     public CustomAdapter showFooter(boolean withCommit) {
-        return show(stateFooter, withCommit);
+        headerFooterMore[1] = true;
+        if (withCommit)
+            notifyDataSetChanged();
+        return this;
     }
 
     public CustomAdapter show(String tag) {
@@ -211,7 +199,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        final RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -232,7 +220,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
             StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
             if (holder.getLayoutPosition() == 0 &&
-                    headerAndFooter[0]) {
+                    headerFooterMore[0]) {
                 p.setFullSpan(true);
             } else if ((holder.getLayoutPosition() >= dataList.size() + headerOffset)) {
                 p.setFullSpan(true);
@@ -243,13 +231,23 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        if (headerAndFooter[0] && position == 0) {
+        if (headerFooterMore[0] && position == 0) {
             if (stateHeader.getItemType() == -1) {
                 ++itemType;
                 stateItemTypes.add(itemType);
                 return stateHeader.setItemType(itemType);
             } else {
                 return stateHeader.getItemType();
+            }
+        }
+
+        if (headerFooterMore[1] && position == getItemCount() - 1 ) {
+            if (stateFooter.getItemType() == -1) {
+                ++itemType;
+                stateItemTypes.add(itemType);
+                return stateFooter.setItemType(itemType);
+            } else {
+                return stateFooter.getItemType();
             }
         }
 
@@ -291,6 +289,11 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             return (stateHeader.getHolder() != null) ? stateHeader.getHolder() :
                     stateHeader.setHolder(stateHeader.viewHolder(parent));
         }
+        if (stateFooter != null && stateFooter.getItemType() == viewType) {
+            return (stateFooter.getHolder() != null) ? stateFooter.getHolder() :
+                    stateFooter.setHolder(stateFooter.viewHolder(parent));
+        }
+
         for (CustomAdapterItem item : customAdapterItems) {
             if (item.getItemType() == viewType) {
                 return item.setHolder(item.viewHolder(parent));
@@ -312,7 +315,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             holder.itemView.setTag(R.id.ca_holder, holder);
             holder.itemView.setOnClickListener(onClickListener);
         }
-        if (headerAndFooter[0] && position == 0) {
+        if ((headerFooterMore[0] && position == 0) ||
+                (headerFooterMore[1] && position == getItemCount() - 1)
+                ) {
         } else if (position - headerOffset < dataList.size())
             for (CustomAdapterItem item : customAdapterItems) {
                 if (dataList.get(position - headerOffset) != null &&
@@ -330,7 +335,9 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemCount() {
         return dataList.size() + stateCurrentSize +
-                ((headerAndFooter[0]) ? 1 : 0);
+                ((headerFooterMore[0]) ? 1 : 0) +
+                ((headerFooterMore[1]) ? 1 : 0)
+                ;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -364,5 +371,4 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             };
         }
     }
-
 }

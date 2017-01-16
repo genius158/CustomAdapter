@@ -17,6 +17,7 @@ public abstract class StateAdapterItem<T extends RecyclerView.ViewHolder>
     public static final int NORMAL = 0;
     public static final int HEADER = 1;
     public static final int FOOTER = 2;
+    public static final int LOAD_MORE = 3;
 
 
     public StateAdapterItem(String tag, boolean isShow, Integer stateItemType, T t) {

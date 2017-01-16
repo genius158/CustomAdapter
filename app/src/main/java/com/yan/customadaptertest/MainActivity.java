@@ -4,8 +4,6 @@ import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.TypedValue;
@@ -18,6 +16,7 @@ import android.widget.Toast;
 import com.yan.adapter.CustomAdapter;
 import com.yan.adapter.CustomAdapterItem;
 import com.yan.adapter.OnItemClickListener;
+import com.yan.adapter.OnLoadMoreListener;
 import com.yan.adapter.StateAdapterItem;
 
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import java.util.List;
 
 import static com.yan.adapter.StateAdapterItem.FOOTER;
 import static com.yan.adapter.StateAdapterItem.HEADER;
+import static com.yan.adapter.StateAdapterItem.LOAD_MORE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.rv);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
 //        recyclerView.setLayoutManager(new GridLayoutManager(this,4));
         objects = new ArrayList<>();
         objects.add(new Integer(1));
-        toast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         objects.add(new CustomAdapter(null));
         objects.add(new Integer(1));
         objects.add(new Float(1.00001));
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         objects.add(new Float(1.00001));
         objects.add(new CustomAdapter(null));
         objects.add("sdfsdfasdfasdfasdf");
-
 
         dataList = new ArrayList<>();
         dataList.addAll(objects);
@@ -110,11 +109,11 @@ public class MainActivity extends AppCompatActivity {
                         if (noData.getHolder() != null)
                             ((HolderTest2) noData.getHolder()).textView.append("-");
 
-                        if (times % 5 != 0) {
-                            adapter.findStateItem("FIXED").show();
-                        } else {
-                            adapter.findStateItem("FIXED").hide();
-                        }
+//                        if (times % 5 != 0) {
+//                            adapter.findStateItem("FIXED").show();
+//                        } else {
+//                            adapter.findStateItem("FIXED").hide();
+//                        }
 
                         if (times % 4 == 0) {
                             adapter.show("DataError")
@@ -321,6 +320,15 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                         return holderTest2;
+                    }
+                })
+                //loadMore
+                .addAdapterItem(new StateAdapterItem<HolderTest2>(LOAD_MORE) {
+                    @Override
+                    public HolderTest2 viewHolder(ViewGroup parent) {
+                        return new HolderTest2(
+                                LayoutInflater.from(MainActivity.this).inflate(R.layout.item_type_loadmore, parent, false)
+                        );
                     }
                 })
                 //footer
