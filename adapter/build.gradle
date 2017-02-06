@@ -144,15 +144,17 @@ android {
 group = 'com.yan.adapter'
 version = '1.1.7'
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
 
-}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:recyclerview-v7:+'
 }
 
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+}
 
 task generateSourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
