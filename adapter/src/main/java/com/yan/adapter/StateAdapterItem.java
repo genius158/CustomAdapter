@@ -13,10 +13,11 @@ public abstract class StateAdapterItem<T extends RecyclerView.ViewHolder>
     private CustomAdapter adapter;
     private String tag;
 
-    private int stateItemType = 0;
     public static final int NORMAL = 0;
     public static final int HEADER = 1;
     public static final int FOOTER = 2;
+
+    private int stateItemType = NORMAL;
 
     public StateAdapterItem(String tag, boolean isShow, Integer stateItemType, T t) {
         super(t);
