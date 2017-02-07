@@ -250,7 +250,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 && stateHeader != null
                 && stateHeader.isShow()
                 ) {
-            if (stateHeader.getItemType() == -1) {
+            if (stateHeader.getItemType().equals(-1)) {
                 ++itemType;
                 stateItemTypes.add(itemType);
                 return stateHeader.setItemType(itemType);
@@ -262,7 +262,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (stateFooter != null
                 && stateFooter.isShow()
                 && position == getItemCount() - 1) {
-            if (stateFooter.getItemType() == -1) {
+            if (stateFooter.getItemType().equals(-1)) {
                 ++itemType;
                 stateItemTypes.add(itemType);
                 return stateFooter.setItemType(itemType);
@@ -275,7 +275,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (position - headerOffset < dataList.size()) {
                 if (dataList.get(position - headerOffset) != null
                         && dataList.get(position - headerOffset).getClass() == item.dataType()) {
-                    if (item.getItemType() == -1) {
+                    if (item.getItemType().equals(-1)) {
                         return item.setItemType(++itemType);
                     } else {
                         return item.getItemType();
@@ -283,7 +283,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             } else {
                 if (stateAdapterItems != null) {
-                    if (stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType() == -1) {
+                    if (stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType().equals(-1)) {
                         ++itemType;
                         stateItemTypes.add(itemType);
                         return stateAdapterItems.get(position - headerOffset - dataList.size()).setItemType(itemType);
