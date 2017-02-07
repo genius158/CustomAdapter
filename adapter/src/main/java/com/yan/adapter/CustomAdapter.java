@@ -250,7 +250,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 && stateHeader != null
                 && stateHeader.isShow()
                 ) {
-            if (stateHeader.getItemType().equals(-1)) {
+            if (stateHeader.getItemType() == -1) {
                 ++itemType;
                 stateItemTypes.add(itemType);
                 return stateHeader.setItemType(itemType);
@@ -262,7 +262,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (stateFooter != null
                 && stateFooter.isShow()
                 && position == getItemCount() - 1) {
-            if (stateFooter.getItemType().equals(-1)) {
+            if (stateFooter.getItemType() == -1) {
                 ++itemType;
                 stateItemTypes.add(itemType);
                 return stateFooter.setItemType(itemType);
@@ -275,7 +275,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (position - headerOffset < dataList.size()) {
                 if (dataList.get(position - headerOffset) != null
                         && dataList.get(position - headerOffset).getClass() == item.dataType()) {
-                    if (item.getItemType().equals(-1)) {
+                    if (item.getItemType() == -1) {
                         return item.setItemType(++itemType);
                     } else {
                         return item.getItemType();
@@ -283,7 +283,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             } else {
                 if (stateAdapterItems != null) {
-                    if (stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType().equals(-1)) {
+                    if (stateAdapterItems.get(position - headerOffset - dataList.size()).getItemType() == -1) {
                         ++itemType;
                         stateItemTypes.add(itemType);
                         return stateAdapterItems.get(position - headerOffset - dataList.size()).setItemType(itemType);
@@ -313,24 +313,24 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (stateHeader != null
-                && stateHeader.getItemType() == viewType) {
+                && stateHeader.getItemType().equals(viewType)) {
             return (stateHeader.getHolder() != null)
                     ? stateHeader.getHolder()
                     : stateHeader.setHolder(stateHeader.viewHolder(parent));
         }
         if (stateFooter != null
-                && stateFooter.getItemType() == viewType) {
+                && stateFooter.getItemType().equals(viewType)) {
             return (stateFooter.getHolder() != null)
                     ? stateFooter.getHolder()
                     : stateFooter.setHolder(stateFooter.viewHolder(parent));
         }
         for (CustomAdapterItem item : customAdapterItems) {
-            if (item.getItemType() == viewType) {
+            if (item.getItemType().equals(viewType)) {
                 return item.setHolder(item.viewHolder(parent));
             }
         }
         for (StateAdapterItem item : stateAdapterItems) {
-            if (item.getItemType() == viewType) {
+            if (item.getItemType().equals(viewType)) {
                 return (item.getHolder() != null) ? item.getHolder() :
                         item.setHolder(item.viewHolder(parent));
             }
