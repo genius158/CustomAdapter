@@ -12,7 +12,7 @@
 
 # include lib
 
-    Gradle: compile 'com.yan.adapter:adapter:1.1.8'
+    Gradle: compile 'com.yan.adapter:adapter:1.1.9'
 
 # how to use    
 
