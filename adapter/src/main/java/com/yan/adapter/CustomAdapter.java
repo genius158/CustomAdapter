@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yan.adapter.StateAdapterItem.FOOTER;
-import static com.yan.adapter.StateAdapterItem.HEADER;
 
 /**
  * Created by yan on 2017/1/13.
@@ -26,6 +24,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private List dataList;
     private Integer itemType = 0x101;
     private int headerOffset = 0;
+    private GridLayoutManager.SpanSizeLookup spanSizeLookup;
 
     private View.OnClickListener onClickListener;
     private OnItemClickListener onItemClickListener;
@@ -49,6 +48,10 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+    public void setSpanSizeLookup(GridLayoutManager.SpanSizeLookup spanSizeLookup) {
+        this.spanSizeLookup = spanSizeLookup;
+    }
+
     public CustomAdapter addAdapterItem(CustomAdapterItem item) {
         if (item instanceof StateAdapterItem) {
             StateAdapterItem stateAdapterItem = (StateAdapterItem) item;
@@ -60,10 +63,10 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 stateItemTypes = new ArrayList<>();
             }
 
-            if (stateAdapterItem.getStateItemType() == HEADER) {
+            if (stateAdapterItem.getStateItemType() == StateAdapterItem.HEADER) {
                 if (stateHeader != null) {
                     try {
-                        throw new Error("can only hold one header");
+                        throw new RuntimeException("can only hold one header");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -74,10 +77,10 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 stateHeader = stateAdapterItem;
                 return this;
 
-            } else if (stateAdapterItem.getStateItemType() == FOOTER) {
+            } else if (stateAdapterItem.getStateItemType() == StateAdapterItem.FOOTER) {
                 if (stateFooter != null) {
                     try {
-                        throw new Error("can only hold one footer");
+                        throw new RuntimeException("can only hold one footer");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -208,9 +211,13 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         final RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager instanceof GridLayoutManager) {
             final GridLayoutManager gridManager = ((GridLayoutManager) manager);
+
             gridManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
+                    if (spanSizeLookup != null && (position < dataList.size() + headerOffset && position > headerOffset - 1)) {
+                        return spanSizeLookup.getSpanSize(position);
+                    }
                     return (stateItemTypes != null && stateItemTypes.contains(getItemViewType(position)))
                             ? gridManager.getSpanCount()
                             : 1;
@@ -240,7 +247,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (customAdapterItems == null
                 || customAdapterItems.isEmpty()) {
             try {
-                throw new Error("must call addAdapterItem to add item type");
+                throw new RuntimeException("must call addAdapterItem to add item type");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -294,7 +301,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         }
         try {
-            throw new Error("require customAdapterItem for " + dataList.get(position - headerOffset).getClass()
+            throw new RuntimeException("require customAdapterItem for " + dataList.get(position - headerOffset).getClass()
                     + " please check the customAdapterItem that you had add");
         } catch (Exception e) {
             e.printStackTrace();
