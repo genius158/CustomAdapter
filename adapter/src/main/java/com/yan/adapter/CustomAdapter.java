@@ -112,7 +112,7 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             }
         }
         try {
-            throw new Exception("findStateItem Exception : tag " + tag + "not find");
+            throw new RuntimeException("findStateItem Exception : tag " + tag + "not find");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -8,7 +8,7 @@ android {
         minSdkVersion 11
         targetSdkVersion 24
         versionCode 3
-        versionName "1.2.0"
+        versionName "1.2.1"
     }
     buildTypes {
         release {
@@ -19,13 +19,13 @@ android {
 }
 
 group = 'com.yan.adapter'
-version = '1.2.0'
+version = '1.2.1'
 
 
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:recyclerview-v7:+'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
 }
 
 tasks.withType(Javadoc) {
@@ -66,9 +66,9 @@ bintray {
         name = 'com.yan.adapter'
 
         version {
-            name = '1.2.0'
+            name = '1.2.1'
             desc = "a adapter for recyclerView"
-            vcsTag = '1.2.0'
+            vcsTag = '1.2.1'
         }
 
         licenses = ['Apache-2.0']
